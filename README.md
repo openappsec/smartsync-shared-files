@@ -7,7 +7,7 @@
 
 open-appsec is a machine learning security engine that preemptively and automatically prevent threats against Web Application & APIs.
 
-open-appsec smartsync shared files service is in charge of providing shared file storage services for open-appsec smartsync service.
+open-appsec smartsync-shared-files service provides and interface to physical storage used by smartsync service for storing learning data
 
 ## open-appsec smartsync-shared-files service compilation instructions
 
