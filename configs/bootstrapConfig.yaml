@@ -1,0 +1,30 @@
+server:
+  port: 8080
+  timeout: "15s"
+  configurationServer: "" # configuration server can be either etcd or empty
+log:
+  level: "debug"
+tracer:
+  host: localhost:6831
+  enabled: false
+filesystem_db:
+  root: "/db/"
+  ttl: "2h"
+errors:
+  filepath: "configs/error-responses.json"
+#  change code to your own and add it to wiki - https://wiki.checkpoint.com/confluence/display/PROJECTINFO/Error+responses+-+MSRV+codes
+  code: 1111
+secret:
+  number:
+    one: ""
+    two: ""
+# the values saved here can be overwritten by adding the following environment variables to your configmap:
+# 1. ENV_NUMBER_ONE
+# 2. ENV_NUMBER_TWO
+env:
+  number:
+    one: ""
+    two: ""
+
+# note that all values of variables which are defined here will be overwritten by environment variables
+# in your configmap/secret/deployment yaml files

@@ -1,0 +1,51 @@
+{
+  "repository-code": {
+    "message": "Represent the prefix of the internalCode for this repository",
+    "description": "Represent the prefix of the internalCode for this repository",
+    "code": "1111",
+    "severity": "Low",
+    "removeFromHTMLReport": true
+  },
+  "default-error": {
+    "message": "Unknown Error, contact support",
+    "description": "Unknown Error, check logs",
+    "messageId": "000",
+    "severity": "High"
+  },
+  "internal-error": {
+    "message": "Internal Server Error",
+    "description": "Unknown Error, check logs",
+    "messageId": "001",
+    "severity": "High"
+  },
+  "timeout-error": {
+    "message": "Service unavailable - request timeout",
+    "description": "Service reached timeout while handling request",
+    "messageId": "002",
+    "severity": "High"
+  },
+  "no-agent-id-error": {
+    "message": "Please add header X-Agent-Id to your request",
+    "description": "Request headers don't include agent id",
+    "messageId": "003",
+    "severity": "High"
+  },
+  "no-profile-id-error": {
+    "message": "Please add header X-Profile-Id to your request",
+    "description": "Request headers don't include profile id",
+    "messageId": "004",
+    "severity": "High"
+  },
+  "no-tenant-id-error": {
+    "message": "Please add header X-Tenant-Id to your request",
+    "description": "Request headers don't include tenant id",
+    "messageId": "005",
+    "severity": "High"
+  },
+  "failed-to-marshal-hello-world": {
+    "message": "Failed to generate hello world response",
+    "description": "Failed to create hello world response in bytes, check logs",
+    "messageId": "006",
+    "severity": "High"
+  }
+}
