@@ -1,0 +1,1 @@
+# smartsync-shared-files
