@@ -1,6 +1,6 @@
 <div align=center>
 <img src="https://i2-s3-ui-static-content-prod-10.s3.eu-west-1.amazonaws.com/elpis/tree-no-bg-256.png" width="100" height="100"> 
-<h1>openappsec/smartsync</h1>
+<h1>openappsec/smartsync-shared-files</h1>
 </div>
 
 ## About
@@ -41,4 +41,4 @@ Instructions how to install golang can be found here: https://go.dev/doc/install
 ```
 
 ## License
-open-appsec/smartsync is open source and available under the Apache 2.0 license.
+open-appsec/smartsync-shared-files is open source and available under the Apache 2.0 license.

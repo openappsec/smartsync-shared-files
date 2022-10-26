@@ -27,8 +27,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -a -installsuffix cgo -o 
 # alpine linux 3.13.6
 FROM alpine@sha256:e15947432b813e8ffa90165da919953e2ce850bef511a0ad1287d7cb86de84b5
 
-COPY --from=builder /etc/passwd /etc/passwd
-
 # Copy our static executable
 COPY --from=builder /go/bin/app /go/bin/app
 
