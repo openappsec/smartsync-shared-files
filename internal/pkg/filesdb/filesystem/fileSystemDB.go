@@ -62,28 +62,32 @@ func NewAdapter(conf Configuration) (*Adapter, error) {
 }
 
 func cleanup(root string, ttl time.Duration) {
-	tempFiles := make([]string, 0)
-	err := filepath.WalkDir(
-		root,
-		func(path string, d fs.DirEntry, err error) error {
-			if err != nil || d == nil {
-				log.Errorf("fail to cleanup. dirEntry: %+v, err: %v", d, err)
-				return err
-			}
-			if d.IsDir() {
-				return nil
-			}
-			if models.IsTempFile(path) {
-				tempFiles = append(tempFiles, path)
-			}
-			return nil
-		},
-	)
-	if err != nil {
-		log.Warnf("failed to cleanup old temp files")
-	}
 	go func(root string, ttl time.Duration) {
+		log.Infof("clean up root directory")
+		tempFiles := make([]string, 0)
+		err := filepath.WalkDir(
+			root,
+			func(path string, d fs.DirEntry, err error) error {
+				if err != nil || d == nil {
+					log.Errorf("fail to cleanup. dirEntry: %+v, err: %v", d, err)
+					return err
+				}
+				if d.IsDir() {
+					return nil
+				}
+				log.Debugf("checking file: %v", path)
+				if models.IsTempFile(path) {
+					tempFiles = append(tempFiles, path)
+				}
+				return nil
+			},
+		)
+		if err != nil {
+			log.Warnf("failed to cleanup old temp files")
+		}
+		log.Debug("cleanup list is ready")
 		time.Sleep(ttl)
+		log.Infof("removing files: %v", tempFiles)
 		for _, filePath := range tempFiles {
 			err := os.Remove(filePath)
 			if err != nil && !os.IsNotExist(err) {
