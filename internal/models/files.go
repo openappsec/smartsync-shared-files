@@ -28,5 +28,6 @@ type FileMetadata struct {
 func IsTempFile(path string) bool {
 	return !(strings.Contains(path, "/remote/") ||
 		strings.Contains(path, "/processed/") ||
-		strings.Contains(path, "/tuning"))
+		strings.Contains(path, "/tuning") ||
+		strings.Contains(path, "attributes.data"))
 }
