@@ -41,6 +41,7 @@ USER appuser
 
 # Port on which the service will be exposed.
 EXPOSE 80
+EXPOSE 8080
 
 # Run the app binary.
 ENTRYPOINT ["/go/bin/app"]

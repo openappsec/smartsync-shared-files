@@ -6,16 +6,17 @@ import (
 	"strconv"
 	"time"
 
-	"openappsec.io/smartsync-shared-files/internal/models"
 	"openappsec.io/errors"
 	"openappsec.io/errors/errorloader"
 	"openappsec.io/health"
 	"openappsec.io/log"
+	"openappsec.io/smartsync-shared-files/internal/models"
 )
 
 const (
 	serverConfBaseKey    = "server"
 	serverPortConfKey    = serverConfBaseKey + ".port"
+	serverAltPortConfKey = serverConfBaseKey + ".alternative_port"
 	serverTimeoutConfKey = serverConfBaseKey + ".timeout"
 
 	errorsConfBaseKey = "errors"
@@ -68,9 +69,10 @@ type Server interface {
 
 // Adapter server struct type
 type Adapter struct {
-	server Server
-	wait   time.Duration
-	conf   Configuration
+	server    Server
+	altServer Server
+	wait      time.Duration
+	conf      Configuration
 
 	healthSvc HealthService
 	svc       SharedFilesService
@@ -92,6 +94,10 @@ func NewHTTPAdapter(ctx context.Context, cs Configuration, hs HealthService, ds 
 	ra.wait = serverTimeout
 	r := ra.newRouter(ctx)
 	server := &http.Server{
+		Handler: r,
+	}
+
+	altServer := &http.Server{
 		Handler: r,
 	}
 
@@ -122,13 +128,31 @@ func NewHTTPAdapter(ctx context.Context, cs Configuration, hs HealthService, ds 
 
 	ra.server = server
 
+	altPort, err := cs.GetInt(serverAltPortConfKey)
+	if err != nil {
+		return nil, err
+	}
+
+	if altPort > 0 {
+		altServer.Addr = ":" + strconv.Itoa(altPort)
+	}
+
+	ra.altServer = altServer
+
 	return &ra, nil
 }
 
 // Start REST webserver
 func (a *Adapter) Start() error {
 	log.WithContext(context.Background()).Infoln("Server is starting...")
-	return a.server.ListenAndServe()
+	errCh := make(chan error)
+	go func() { errCh <- a.server.ListenAndServe() }()
+	go func() { errCh <- a.altServer.ListenAndServe() }()
+	var err error
+	for i := 0; i < 2; i++ {
+		err = <-errCh
+	}
+	return err
 }
 
 // Stop REST webserver
@@ -140,6 +164,9 @@ func (a *Adapter) Stop(ctx context.Context) error {
 	log.WithContext(ctx).Infoln("Shutting down server...")
 	if err := a.server.Shutdown(ctx); err != nil {
 		stopError = errors.New("Failed to gracefully stop server")
+	}
+	if err := a.altServer.Shutdown(ctx); err != nil {
+		stopError = errors.Wrap(stopError, "Failed to gracefully stop alternate server")
 	}
 	return stopError
 }
