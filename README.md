@@ -3,7 +3,7 @@
 <h1>openappsec/smartsync-shared-files</h1>
 </div>
 
-## About
+##   About
 
 open-appsec is a machine learning security engine that preemptively and automatically prevent threats against Web Application & APIs.
 
